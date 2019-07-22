@@ -661,6 +661,36 @@ class TestClusterCreate(QdsCliTestCase):
         with self.assertRaises(SystemExit):
             qds.main()
 
+    def test_hive_cluster_v21(self):
+        sys.argv = ['qds.py', '--version', 'v2.1', 'cluster', 'create', '--label', 'test_label',
+                    '--flavour', 'hive']
+        print_command()
+        Connection._api_call = Mock(return_value={})
+        qds.main()
+        Connection._api_call.assert_called_with('POST', 'clusters',
+                                                {
+                                                    'engine_config': {
+                                                        'flavour': 'hive'
+                                                    },
+                                                    'cluster_info': {
+                                                        'label': ['test_label'],
+                                                    }
+                                                })
+
+    def test_hadoop2_cluster_v21_invalid(self):
+        sys.argv = ['qds.py', '--version', 'v2.1', 'cluster', 'create', '--label', 'test_label',
+                    '--flavour', 'hadoop2']
+        print_command()
+        with self.assertRaises(SystemExit):
+            qds.main()
+
+    def test_hive_cluster_v2_invalid(self):
+        sys.argv = ['qds.py', '--version', 'v2', 'cluster', 'create', '--label', 'test_label',
+                    '--flavour', 'hive']
+        print_command()
+        with self.assertRaises(SystemExit):
+            qds.main()
+
 
 class TestClusterUpdate(QdsCliTestCase):
     def test_minimal(self):

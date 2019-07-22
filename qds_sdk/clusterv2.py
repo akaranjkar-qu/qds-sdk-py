@@ -708,13 +708,14 @@ class ClusterInfoV2(object):
 class ClusterV2(Resource):
 
     rest_entity_path = "clusters"
+    api_version = "v" + str(Qubole.version)
 
     @classmethod
     def create(cls, cluster_info):
         """
         Create a new cluster using information provided in `cluster_info`.
         """
-        conn = Qubole.agent(version="v2")
+        conn = Qubole.agent(version=Qubole.version)
         return conn.post(cls.rest_entity_path, data=cluster_info)
 
     @classmethod
@@ -723,7 +724,7 @@ class ClusterV2(Resource):
         Update the cluster with id/label `cluster_id_label` using information provided in
         `cluster_info`.
         """
-        conn = Qubole.agent(version="v2")
+        conn = Qubole.agent(version=Qubole.version)
         return conn.put(cls.element_path(cluster_id_label), data=cluster_info)
 
     @classmethod
@@ -732,7 +733,7 @@ class ClusterV2(Resource):
         Update the cluster with id/label `cluster_id_label` using information provided in
         `cluster_info`.
         """
-        conn = Qubole.agent(version="v2")
+        conn = Qubole.agent(version=Qubole.version)
         return conn.post(cls.element_path(cluster_id_label) + '/clone', data=cluster_info)
 
     @classmethod
@@ -758,7 +759,7 @@ class ClusterV2(Resource):
         if per_page:
             params['per_page'] = per_page
         params = None if not params else params
-        conn = Qubole.agent(version="v2")
+        conn = Qubole.agent(version=Qubole.version)
         cluster_list = conn.get(cls.rest_entity_path)
         if state is None:
             # return the complete list since state is None
@@ -776,5 +777,5 @@ class ClusterV2(Resource):
         """
         Show information about the cluster with id/label `cluster_id_label`.
         """
-        conn = Qubole.agent(version="v2")
+        conn = Qubole.agent(version=Qubole.version)
         return conn.get(cls.element_path(cluster_id_label))

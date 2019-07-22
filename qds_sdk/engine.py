@@ -1,4 +1,5 @@
 from qds_sdk import util
+from qds_sdk.qubole import Qubole
 
 
 class Engine:
@@ -145,9 +146,12 @@ class Engine:
     @staticmethod
     def engine_parser(argparser):
         engine_group = argparser.add_argument_group("engine settings")
+        engine_flavour_choices=["hadoop", "hadoop2", "presto", "spark", "hbase", "airflow", "deeplearning"]
+        if Qubole.version == 'v2.1':
+            engine_flavour_choices[engine_flavour_choices.index("hadoop2")] = "hive"
         engine_group.add_argument("--flavour",
                                   dest="flavour",
-                                  choices=["hadoop", "hadoop2", "presto", "spark", "hbase", "airflow", "deeplearning"],
+                                  choices=engine_flavour_choices,
                                   default=None,
                                   help="Set engine flavour")
 
